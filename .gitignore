@@ -1,0 +1,62 @@
+# Altium Designer
+__Previews/
+History/
+Project\ Logs\ for\ */
+Project\ Outputs\ for\ */
+*.htm
+*.html
+*.drc
+*.PrjPcbStructure
+*.OutJob
+
+# Quartus Project
+db/
+.qsys_edit/
+greybox_tmp/
+hps_isw_handoff/
+incremental_db/
+simulation/
+output_files/
+*.tcl~
+rtl/hps_0.h
+
+rtl/soc_system/*
+!rtl/soc_system/synthesis/
+rtl/soc_system/synthesis/*
+!rtl/soc_system/synthesis/*.qip
+
+rtl/ip/FFT_IFFT/FFT_IFFT/*
+!rtl/ip/FFT_IFFT/FFT_IFFT/*.qsys
+!rtl/ip/FFT_IFFT/FFT_IFFT/synthesis/
+rtl/ip/FFT_IFFT/FFT_IFFT/synthesis/*
+!rtl/ip/FFT_IFFT/FFT_IFFT/synthesis/*.qip
+
+rtl/ip/FP_*/FP_*_sim.f
+rtl/ip/FP_*/FP_*_sim/
+
+*.cmp
+*.bsf
+*.sip
+*.spd
+
+*.qws
+*.csv
+*.rpt
+*.sopcinfo
+*.xml
+c5_pin_model_dump.txt
+
+# Development Studio 5
+.vscode/
+Debug/
+.settings/
+.metadata/
+RemoteSystemsTempFiles/
+config_hardware/
+*.bak
+*.log
+firmware/hps_altera/debugger
+firmware/hps_altera/bootloader/*
+firmware/hps_altera/DE10_serial_parallel/INC/*
+firmware/hps_altera/DE10_serial_parallel/SRC/*
+!**/.gitkeep
