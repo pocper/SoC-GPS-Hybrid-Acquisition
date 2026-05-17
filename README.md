@@ -1,11 +1,9 @@
 # SoC-based GPS Receiver Implementation
-## 基於 SoC 平台之 GPS 接收器雙信號擷取加速研究
 
 本專案實作了一個基於 Intel Cyclone V SoC (DE10-Nano) 平台的 GPS 接收器系統，結合了自製的 MAX2769 RF 前端模組、FPGA 硬體加速器以及 HPS 控制韌體。
 
 ## 目錄
 - [SoC-based GPS Receiver Implementation](#soc-based-gps-receiver-implementation)
-  - [基於 SoC 平台之 GPS 接收器雙信號擷取加速研究](#基於-soc-平台之-gps-接收器雙信號擷取加速研究)
   - [目錄](#目錄)
   - [1. 系統架構 (System Architecture)](#1-系統架構-system-architecture)
   - [2. 目錄導覽 (Repository Structure)](#2-目錄導覽-repository-structure)
@@ -17,16 +15,16 @@
     - [1. 測試設備 (Testing Equipment)](#1-測試設備-testing-equipment)
     - [2. 核心運算耗時對比 (Core Algorithm Performance)](#2-核心運算耗時對比-core-algorithm-performance)
     - [3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance \& TTFF)](#3-全系統定位效能與-ttff-綜合對比-system-level-performance--ttff)
-      - [兩架構在不同訊號功率下之擷取耗時與 TTFF 綜合效能對比](#兩架構在不同訊號功率下之擷取耗時與-ttff-綜合效能對比)
     - [4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)](#4-觀測組-5-次獨立實測原始數據紀錄-raw-experimental-data)
 
 
 ## 1. 系統架構 (System Architecture)
-<div align="center">
-<figure>
+
+<div style="text-align: center; margin: 20px 0;">
   <img src="image/system_architecture_block_diagram.png" alt="系統架構" width="600">
-  <figcaption><i>圖：系統架構圖</i></figcaption>
-</figure>
+  <p style="margin-top: 10px;">
+  <i>圖：系統架構圖</i>
+  </p>
 </div>
 
 本系統主要分為三大模組：
@@ -37,17 +35,20 @@
 ## 2. 目錄導覽 (Repository Structure)
 
 1. [pcb frontend](pcb_frontend/) (Altium Designer Project)
+
 包含自製 MAX2769 RF 模組的設計檔案。
    - **硬體版本**: 目前推薦使用 **v3**。
    - **內容**: Altium Designer 專案、電路圖 (PDF)、製作與維修紀錄。
 
 2. [rtl](rtl/) (Quartus Project)
+
 包含部署於 FPGA 端的 Verilog 原始碼與 Intel Quartus Prime 專案檔。
    - **核心模組**: 包含 Parallel Code Phase Search 與 Serial Search 之雙重訊號擷取架構。
    - **環境**: Intel Quartus Prime。
    - **重點**: 針對硬體並行化處理進行優化，減少擷取所需時間。
 
 3. [firmware](firmware/) (Arm DS Project)
+
 包含執行於 HPS (ARM Cortex-A9) 的韌體程式碼。
    - **主要功能**: 透過 SoC Bridge 控制硬體暫存器、管理 correlator 數據。
    - **環境**: Intel SoC EDS / VS Code。
@@ -55,12 +56,14 @@
    - [**hps_altera/**](firmware/hps_altera/): **舊版相容分支**。使用 DS-5 (AC5) 編譯，專為實驗室內建有「買斷版授權」之 DS-5 Altera Edition 筆電設計，**[詳細編譯與專案設定請見此目錄 README]**。
 
 4. [matlab](matlab/) (MATLAB Project)
+
 包含 GPS 衛星訊號擷取演算法的模擬程式碼。
    - **主要功能**: 實現了平行碼相位搜尋演算法(Parallel Code Phase Search)。
    - **環境**: MATLAB。
    - **重點**: 作為演算法的功能模擬與設計標準，用於提前驗證演算法可行性，並作為後續 SoC 硬體開發時比對資料正確性的主要依據。
 
 5. [document](docs/)
+
 存放專案相關的技術文件與操作指南。
    - [**how_to_apply_ds5.md**](docs/how_to_apply_ds5.md): **環境申請指南** (含 TSRI 資源、校園 DNS 正反查申請)。
    - [**emulator.md**](docs/emulator.md): **硬體操作手冊** (Agilent E4438C 與 Spirent GSS7000 操作流程)。
@@ -95,24 +98,26 @@
 4. **電源供應**：將 DC Power Cable(5V/2A) 連接至 DE10-Nano 的 **J14** 孔位，另一端連接插座。
 
 > [!CAUTION]
-> **⚠️ 重要上電順序提醒 (Critical Safety Warning)**
+> **重要上電順序提醒 (Critical Safety Warning)**
+> 
 > 在接通電源前，請務必確認上述 **1~3 項接線已全部連接穩固**。
+> 
 > **嚴禁在上電狀態下熱插拔 SMA 接頭**。由於上電瞬間可能產生瞬間脈衝 (Pulse) 或靜電，若此時才連接 SMA 接口，極易導致射頻前端 MAX2769 發生短路或因突波而燒毀。請遵循 **「先接線、後上電」** 的原則，拆卸時則反之。
 
 ## 5. 演算法架構與狀態機 (Alogorithm & Finite State Machine)
 
-<div align="center">
-<figure>
+<div style="text-align: center; margin: 20px 0;">
   <img src="image/serial_search_architecture.png" alt="Serial Search 架構" width="600">
-  <figcaption><i>圖：Serial Search 模組硬體架構圖</i></figcaption>
-</figure>
+  <p style="margin-top: 10px;">
+  <i>圖：Serial Search 模組硬體架構圖</i>
+  </p>
 </div>
 
-<div align="center">
-<figure>
-  <img src="image/parallel_code_phase_search_architecture.png" alt="Serial Search 架構" width="600">
-  <figcaption><i>圖：Parallel Code Phase Search 模組硬體架構圖</i></figcaption>
-</figure>
+<div style="text-align: center; margin: 20px 0;">
+  <img src="image/parallel_code_phase_search_architecture.png" alt="Parallel Code Phase Search 架構" width="600">
+  <p style="margin-top: 10px;">
+  <i>圖：Parallel Code Phase Search 模組硬體架構圖</i>
+  </p>
 </div>
 
 <div style="max-width: 500px; margin: 0 auto;">
@@ -183,8 +188,7 @@ graph LR
 本專案透過硬體模擬器驗證接收器於不同場景下的定位效能。
 
 ### 1. 測試設備 (Testing Equipment)
-    若需重現驗證結果，請參閱 **[emulator.md](docs/emulator.md)** 之操作指引配置硬體環境：
-    * **射頻訊號源 (RF Simulator)**：**Spirent GSS7000** 多系統射頻訊號模擬器。
+若需重現驗證結果，請參閱 **[emulator.md](docs/emulator.md)** 之操作指引配置硬體環境。
 
 | 實驗環境變數 (Parameter) | 實體軟硬體配置與參數 (Configuration Details)             |
 | :---------------------- | :----------------------------------------------------- |
@@ -199,12 +203,12 @@ graph LR
 
 | 訊號擷取演算法         | 衛星數量 | 頻率搜索範圍 [kHz] | 總體執行時間 [ms] | 核心運算加速比 |
 | :-------------------- | :-----: | :---------------: | :--------------: | :----------: |
-| **直接搜尋法** ^註1, 2 | 1 顆    | $0 \pm 10$        | 80,725.64        | 基準 (1.0x)   |
+| **直接搜尋法** <small>註1, 2</small> | 1 顆    | $0 \pm 10$        | 80,725.64        | 基準 (1.0x)   |
 | **碼相位平行搜尋法**   | 1 顆    | $0 \pm 10$        | **4.07**         | **19,834x**   |
 | **碼相位平行搜尋法**   | 32 顆   | $0 \pm 10$        | **117.65**       | **686x**      |
 
-> **註1**：直接搜尋法之執行時間為完整搜尋所有二維搜尋空間之最大耗時。若於搜尋空間中先行命中載波頻率及碼相位，程式會提早結束。
-> **註2**：直接搜尋法可透過在 FPGA 上配置多組實體硬體通道平行搜尋不同衛星，以降低總體執行時間。
+<small>**註1**：直接搜尋法之執行時間為完整搜尋所有二維搜尋空間之最大耗時。若於搜尋空間中先行命中載波頻率及碼相位，程式會提早結束。</small>
+<small>**註2**：直接搜尋法可透過在 FPGA 上配置多組實體硬體通道平行搜尋不同衛星，以降低總體執行時間。</small>
 
 ### 3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance & TTFF)
 本實驗測試共用相同之基頻硬體資源（Parallel Search 模組與 13 組序列硬體相關器通道），純粹透過 **ARM 韌體排程狀態機 (FSM) 的調度策略分流**，對比系統首次定位時間（Time To First Fix, TTFF）的實測結果：
@@ -212,7 +216,6 @@ graph LR
    * **混合架構 (Parallel Code Phase Search + Serial Search)**：完整驅動 FPGA 內之 Parallel Code Phase Search 硬體加速模組進行全星座快速擷取，隨後動態將參數分派予 13 組序列硬體相關器（Serial Correlator）進行精細微調與追蹤。
    * **單一架構 (Serial Search)**：於軟體層面將 Parallel 加速器暫存器關閉，冷啟動後純依賴 13 組通道進行時域與頻域的逐點掃描。為了排除純韌體超時輪詢變因、專注比對硬體搜尋物理速度，此模式下開機**預先指派模擬器中存在的 10 顆存在衛星號碼（指定 PRN）**。
 
-#### 兩架構在不同訊號功率下之擷取耗時與 TTFF 綜合效能對比
 | 模擬器功率 [dBm] | 架構     | 4 顆衛星達成鎖定鎖定耗時 [s] <br>(範圍 / 平均值) | 首次定位時間 (TTFF) [s] <br>(範圍 / 平均值) | **硬體搜尋加速比** |
 | :-------------: | :------: | :-------------------------------------------: | :---------------------------------------: | :---------------: |
 | **-115**        | 單一      | 19.073 ~ 28.095 (**23.902**)                 | 51.233 ~ 60.218 (**55.570**)              | 基準 (1.0x)       |
@@ -220,11 +223,11 @@ graph LR
 | **-120**        | 單一      | 19.143 ~ 25.171 (**21.554**)                 | 46.075 ~ 56.133 (**50.134**)              | 基準 (1.0x)       |
 |                 | 混合      | 1.152 ~ 2.253 (**1.943**)                    | 27.234 ~ 38.067 (**33.915**)              | **11.09x 加速**   |
 | **-125**        | 單一      | 25.234 ~ 32.026 (**29.351**)                 | 47.057 ~ 74.192 (**61.511**)              | 基準 (1.0x)       |
-|                 | 混合      | 28.180 ~ 84.115 (**50.725**)                 | 80.044 ~ 156.029 (**108.885**)            | ^註1             |
-| **-130**        | 單一/混合 | —                                            | —                                         | ^註2             |
+|                 | 混合      | 28.180 ~ 84.115 (**50.725**)                 | 80.044 ~ 156.029 (**108.885**)            | **註1**           |
+| **-130**        | 單一/混合 | —                                            | —                                         | **註2**           |
 
-> **^註1**：在 `-125 dBm` 下，混合架構因頻率觀測頻寬較寬（500 Hz vs. Serial 125 Hz），致使單一頻率分度（Bin）內累積之總雜訊功率較高。在弱訊號下，真實訊號極易低於硬體偵測門檻而遭誤判，狀態機須反覆驗證，故鎖定耗時拉長。
-> **^註2**：訊號功率降至 `-130 dBm` 時，在當前配置之積分時間（Parallel Code Phase Search: 2 ms / Serial: 1 ms）限制下，相關峰值已無法超越雜訊基底，故不論何種調度模式皆無法達成穩定鎖定。
+<small>**註1**：在 `-125 dBm` 下，混合架構因頻率觀測頻寬較寬（500 Hz vs. Serial 125 Hz），致使單一頻率分度（Bin）內累積之總雜訊功率較高。在弱訊號下，真實訊號極易低於硬體偵測門檻而遭誤判，狀態機須反覆驗證，故鎖定耗時拉長。</small>
+<small>**註2**：訊號功率降至 `-130 dBm` 時，在當前配置之積分時間（Parallel Code Phase Search: 2 ms / Serial: 1 ms）限制下，相關峰值已無法超越雜訊基底，故不論何種調度模式皆無法達成穩定鎖定。</small>
 
 ### 4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)
 若需核對或重現統計大表中的範圍區間，可展開下方摺疊面板檢視各組 Run 1 ~ Run 5 的詳細觀測值：
@@ -233,20 +236,20 @@ graph LR
 <summary><b>點擊展開：查看混合架構 5 次獨立實測詳細數據紀錄</b></summary>
 
 | 模擬器輸出功率 [dBm] | 4 顆衛星達成鎖定之耗時 [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] | 首次定位時間 (TTFF) [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] |
-| ------------------- | ------------------------ | ---------------------- |
-| **-115**            | 2.134 / 3.206 / 1.122 / 3.084 / 1.151 <br> **[Mean: 2.139]** | 26.085 / 39.069 / 29.065 / 36.035 / 27.073 <br> **[Mean: 31.465]** |
-| **-120**            | 2.019 / 2.062 / 2.253 / 2.229 / 1.152 <br> **[Mean: 1.943]** | 34.078 / 37.055 / 38.067 / 33.142 / 27.234 <br> **[Mean: 33.915]** |
+| :-----------------: | :------------------------------------------------------------ | :---------------------------------------------------------- |
+| **-115**            | 2.134 / 3.206 / 1.122 / 3.084 / 1.151 <br> **[Mean: 2.139]**  | 26.085 / 39.069 / 29.065 / 36.035 / 27.073 <br> **[Mean: 31.465]** |
+| **-120**            | 2.019 / 2.062 / 2.253 / 2.229 / 1.152 <br> **[Mean: 1.943]**  | 34.078 / 37.055 / 38.067 / 33.142 / 27.234 <br> **[Mean: 33.915]** |
 | **-125**            | 28.180 / 44.113 / 60.064 / 37.154 / 84.115 <br> **[Mean: 50.725]** | 80.044 / 98.198 / 97.006 / 113.242 / 156.029 <br> **[Mean: 108.885]** |
 </details>
 <br/>
 <details>
 <summary><b>點擊展開：查看單一架構 5 次獨立實測詳細數據紀錄</b></summary>
 
-| 模擬器功率 [dBm] | 4 顆衛星達成鎖定之耗時 [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] | 首次定位時間 (TTFF) [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] |
-| :---: | :--- | :--- |
-| **-115** | 23.033 / 26.176 / 19.073 / 28.095 / 23.131 <br> **[Mean: 23.902]** | 57.134 / 56.106 / 53.161 / 60.218 / 51.233 <br> **[Mean: 55.570]** |
-| **-120** | 23.083 / 25.171 / 20.245 / 19.143 / 20.129 <br> **[Mean: 21.554]** | 56.133 / 46.075 / 53.237 / 48.005 / 47.221 <br> **[Mean: 50.134]** |
-| **-125** | 32.026 / 25.234 / 31.201 / 27.118 / 31.176 <br> **[Mean: 29.351]** | 61.137 / 47.057 / 65.145 / 74.192 / 60.025 <br> **[Mean: 61.511]** |
+| 模擬器輸出功率 [dBm] | 4 顆衛星達成鎖定之耗時 [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] | 首次定位時間 (TTFF) [s] <br> (Run 1 / 2 / 3 / 4 / 5) [平均值] |
+| :-----------------: | :--- | :--- |
+| **-115**            | 23.033 / 26.176 / 19.073 / 28.095 / 23.131 <br> **[Mean: 23.902]** | 57.134 / 56.106 / 53.161 / 60.218 / 51.233 <br> **[Mean: 55.570]** |
+| **-120**            | 23.083 / 25.171 / 20.245 / 19.143 / 20.129 <br> **[Mean: 21.554]** | 56.133 / 46.075 / 53.237 / 48.005 / 47.221 <br> **[Mean: 50.134]** |
+| **-125**            | 32.026 / 25.234 / 31.201 / 27.118 / 31.176 <br> **[Mean: 29.351]** | 61.137 / 47.057 / 65.145 / 74.192 / 60.025 <br> **[Mean: 61.511]** |
 </details>
 
 > [!NOTE]

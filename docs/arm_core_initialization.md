@@ -76,7 +76,7 @@
 
 ### 5. 編譯優化等級配置說明 (Optimization Level)
   
-  * **專案預設配置**：本專案的編譯優化等級**已預先在專案設定檔中鎖定為 `-O0**`。當您匯入專案至 ARM DS 或 DS-5 後，系統會自動套用此配置，一般情況下無需手動修改。
+  * **專案預設配置**：本專案的編譯優化等級**已預先在專案設定檔中鎖定為 `-O0`**。當您匯入專案至 ARM DS 或 DS-5 後，系統會自動套用此配置，一般情況下無需手動修改。
   * **設定核對路徑**：若需確認配置，可於專案點選右鍵 -> `Properties` -> `C/C++ Build` -> `Settings` -> `Tool Settings` -> `ARM C/C++ Compiler` -> `Optimization`，確認等級為 **`-O0` (Minimum optimization / Do not optimize)**。
   * **修正原理**：鎖定 **`-O0`** 可防止編譯器因高階優化進行指令重排、將核心狀態鎖死於 CPU 暫存器、省略硬體指標讀寫，或破壞 Cortex-A9 的 8-Byte 堆疊對齊，從而確保 RTOS 任務切換與底層暫存器控制的時序完全精準。
 
@@ -100,12 +100,11 @@
 
   * **相關連結器警告說明 (Linker Warning L6329W)**：
 
-    當編譯專案時，`主控台 (Console)` 可能會輸出以下警告訊息：
-
-    ```text
-    "ARMCA9_ac6.sct", line 86: Warning: L6329W: Pattern *(correlation_section) only matches removed unused sections.
-    "ARMCA9_ac6.sct", line 89: Warning: L6329W: Pattern *(data_CDC_section) only matches removed unused sections.
-    ```
+    * **警告訊息**:當編譯專案時，`主控台 (Console)` 可能會輸出以下警告訊息：
+        ```text
+        "ARMCA9_ac6.sct", line 86: Warning: L6329W: Pattern *(correlation_section) only matches removed unused sections.
+        "ARMCA9_ac6.sct", line 89: Warning: L6329W: Pattern *(data_CDC_section) only matches removed unused sections.
+        ```
 
     * **原因解析**：此警告代表 ARM Linker 在連結階段時，發現 C 原始碼中**目前尚未有變數或函式實際使用 `__attribute__((section("correlation_section")))` 進行宣告**，或是該宣告的變數因未被程式碼呼叫而被優化器判定為無效區段。
     * **處理對策**：此為正常現象，並不影響系統編譯與其餘功能的運行。當後續演算法開發完成並正確指定對應區段後，此警告將自動消失；或可視需求在代碼中使用 `__attribute__((used))` 強制保留該區段。
@@ -118,8 +117,6 @@
 * **關鍵配置核對 (After)：**
 
     ```c
-    // ==================== 執行緒資源配置 ====================
-
     // 限制系統同時執行的最大執行緒數量 (包含使用者執行緒與內核常駐執行緒)
     #define OS_THREAD_NUM             8
     ```

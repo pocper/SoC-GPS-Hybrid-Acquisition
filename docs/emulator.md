@@ -10,11 +10,27 @@
 | **Agilent ESG**       | E4438C  | 支援 GPS L1 靜態/預錄場景播放。                            |
 | **Spirent Simulator** | GSS7000 | 支援多系統 (GPS/GLONASS) 與多頻段 (L1/L2/L5) 動態軌跡模擬。 |
 
+## 目錄
+- [GPS 訊號模擬器操作指南 (GPS Emulator Guide)](#gps-訊號模擬器操作指南-gps-emulator-guide)
+  - [GPS 訊號模擬器 (GNSS Emulators)](#gps-訊號模擬器-gnss-emulators)
+  - [目錄](#目錄)
+  - [設備一：Agilent E4438C ESG Vector Signal Generator](#設備一agilent-e4438c-esg-vector-signal-generator)
+    - [功能說明](#功能說明)
+    - [操作流程](#操作流程)
+  - [設備二：Spirent GSS7000 Signal Generator](#設備二spirent-gss7000-signal-generator)
+    - [操作流程](#操作流程-1)
+  - [設備狀態與維護紀錄](#設備狀態與維護紀錄)
+    - [設備：Agilent E4438C ESG Vector Signal Generator](#設備agilent-e4438c-esg-vector-signal-generator)
 
 ## 設備一：Agilent E4438C ESG Vector Signal Generator
 本設備主要用於播放預錄的 GPS L1 訊號。
 
-![Image - GPS_simulator_E4438C](../image/GPS_simulator_E4438C.png)
+<div style="text-align: center; margin: 20px 0;">
+  <img src="../image/GPS_simulator_E4438C.png" alt="Agilent_E4438C" width="600">
+  <p style="margin-top: 10px;">
+  <i>圖：Agilent E4438C ESG Vector Signal Generator</i>
+  </p>
+</div>
 
 ### 功能說明
 
@@ -25,7 +41,7 @@
 ### 操作流程
 1. 核心參數設定 (Parameters)
 
-   * **頻率 (Frequency)**: `1575.42 MHz` (GPS L1)
+   * **頻率 (Frequency)**: `1575.42 MHz` (GPS L1)。
 
 2. 開機與基礎設定
    1. **開機**：按下左下角 [電源按鈕]。
@@ -56,7 +72,13 @@
 ## 設備二：Spirent GSS7000 Signal Generator
 
 本設備為高階多頻段訊號模擬器，支援 GPS (L1/L5) 與 GLONASS (L1/L2) 等多系統同時模擬。
-![Image - gss7000_simreplay_overview](../image/gss7000_simreplay_overview.jpg)
+
+<div style="text-align: center; margin: 20px 0;">
+  <img src="../image/gss7000_simreplay_overview.jpg" alt="gss7000_simreplay_overview" width="600">
+  <p style="margin-top: 10px;">
+  <i>圖：Spirent GSS7000 Signal Generator</i>
+  </p>
+</div>
 
 ### 操作流程
 1. 硬體與軟體啟動
@@ -67,10 +89,10 @@
 
 2. 載入場景 (Scenario)
 
-   1. **檔案路徑**：`D:/posapp/Scenarios for SimTEST/Scenarios for SimTEST/simtest_default_v2_1/simtest_default.scn_replay`。
-   2. **備份機制**：若場景檔異常，請從 `D:/posapp/back up/Scenarios for SimTEST.zip` 解壓縮並覆蓋回原路徑。
+   * **檔案路徑**：`D:/posapp/Scenarios for SimTEST/Scenarios for SimTEST/simtest_default_v2_1/simtest_default.scn_replay`。
+   * **備份機制**：若場景檔異常，請從 `D:/posapp/back up/Scenarios for SimTEST.zip` 解壓縮並覆蓋回原路徑。
 
-### 3. 進階參數設定 (僅限播放前)
+3. 進階參數設定 (僅限播放前)
 
    * **接收機位置 (Position)**：點選 `simple_motion.smp` 檔案可設定初始經緯度與路徑。
    * **衛星種類 (Signal type)**：調整欲模擬的系統（如 GPS、GLONASS）。
@@ -83,24 +105,23 @@
      * 進入路徑：`File` > `Single Channel Mode`。
      * **SVID/PRN 切換**：僅在此模式下的 `Initial State` 分頁中，可以手動指定特定的衛星編號 (SVID) 或 PRN。
 
-
-
 4. 播放流程與狀態監測
 
-   1. **開始播放**：點擊工具列的 **[Play]** 圖示。
-   2. **狀態觀察**：請盯住視窗右下角的狀態列，確保其依序完成以下轉變：
+   * **開始播放**：點擊工具列的 **[Play]** 圖示。
+   * **狀態觀察**：請盯住視窗右下角的狀態列，確保其依序完成以下轉變：
    `Ready to run` $\rightarrow$ `Arming` $\rightarrow$ `Trigger wait` $\rightarrow$ **`Running`**。
-   3. **正式輸出**：必須等到狀態顯示為 **`Running`**，硬體才會正式輸出 RF 訊號。
+   * **正式輸出**：必須等到狀態顯示為 **`Running`**，硬體才會正式輸出 RF 訊號。
 
  5. 結束與恢復
 
-   * **停止播放**：點選 **`[Stop]`** 按鈕，系統停止撥放場景。
-   * **解除鎖定**：點選 **`[Revert]`** 按鈕，系統才會釋放播放時的參數鎖定並恢復至場景初始值。
+      * **停止播放**：點選 **`[Stop]`** 按鈕，系統停止撥放場景。
+      * **解除鎖定**：點選 **`[Revert]`** 按鈕，系統才會釋放播放時的參數鎖定並恢復至場景初始值。
 
+## 設備狀態與維護紀錄
 
-
-## 已知問題
-* **設備一：Agilent E4438C ESG Vector Signal Generator**由於是二手且具有年代，若發現訊號產生器連接正確的GPS接收器無法解出正確位置，則可以考慮送廠檢修。
-* 儀器檢測公司：全測儀器科技股份有限公司
-* 公司網址：[官方網站 - 全測儀器科技](https://www.alltestek.com/)
-* 測試日期：2023年06月19日
+### 設備：Agilent E4438C ESG Vector Signal Generator
+* **現況說明**：本設備為二手老舊儀器（近期測試日期：2023年06月19日）。
+* **故障排查（Troubleshooting）**：若在硬體連接完全正確的前提下，GPS 接收器（Receiver）仍無法順利解算定位（Position Fix），在排除硬體接線與韌體設定後，應優先懷疑訊號產生器之 RF 輸出異常。
+* **原廠/第三方檢修資訊**：
+  * 檢修廠商：全測儀器科技股份有限公司 (AllTestek)
+  * 官方網站：[全測儀器科技](https://www.alltestek.com/)
