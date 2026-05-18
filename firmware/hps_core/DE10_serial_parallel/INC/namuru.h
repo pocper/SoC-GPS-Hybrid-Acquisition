@@ -10,7 +10,7 @@
 // System Architecture
 #define ACQ_MODE_SERIAL 0  // Serial Search
 #define ACQ_MODE_HYBRID 1  // Parallel Code Phase Search + Serial Search
-#define ACQ_MODE_SYSTEM ACQ_MODE_SERIAL
+#define ACQ_MODE_SYSTEM ACQ_MODE_HYBRID
 
 #define __I volatile const            /*!< \brief Defines 'read only' permissions */
 #define __O volatile                  /*!< \brief Defines 'write only' permissions */

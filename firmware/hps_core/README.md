@@ -27,8 +27,9 @@
     - [6.1 軟體架構與執行緒 (Software Architecture \& Threads)](#61-軟體架構與執行緒-software-architecture--threads)
     - [6.2 平行碼相位搜尋流程 (Parallel Code Phase Search Flow)](#62-平行碼相位搜尋流程-parallel-code-phase-search-flow)
     - [6.3 數據流與狀態轉移 (Data Flow \& FSM)](#63-數據流與狀態轉移-data-flow--fsm)
-      - [6.3.1 狀態轉移對照圖 (State Machine Comparison)](#631-狀態轉移對照圖-state-machine-comparison)
+      - [6.3.1 狀態機比較圖 (State Machine Comparison)](#631-狀態機比較圖-state-machine-comparison)
       - [6.3.2 邏輯說明](#632-邏輯說明)
+    - [6.4 訊號擷取模式配置 (Acquisition Mode Configuration)](#64-訊號擷取模式配置-acquisition-mode-configuration)
   - [7. 已知問題與解決方案 (Known Issues)](#7-已知問題與解決方案-known-issues)
   - [專案參考 (References)](#專案參考-references)
     - [硬體與底層技術手冊](#硬體與底層技術手冊)
@@ -242,7 +243,7 @@ display_thread_id         = osThreadNew(display_thread, ...);         // 終端�
 
 本專案優化了衛星通道的狀態機轉移邏輯，將原本序列搜尋（Serial Search）所需的擷取與確認階段，簡化為由硬體加速器引導的 `Refine` 階段。
 
-#### 6.3.1 狀態轉移對照圖 (State Machine Comparison)
+#### 6.3.1 狀態機比較圖 (State Machine Comparison)
 ``` mermaid
 stateDiagram-v2
     direction LR
@@ -284,6 +285,21 @@ stateDiagram-v2
 
 * **原始架構**：必須經歷 `Acquire`（擷取）與 `Confirm`（確認）階段，這在 Serial Search中是透過不斷位移碼相位與載波頻率來實現的，也是最耗時的部分。
 * **混合架構 (本專案)**：新增了 **`Refine`** 狀態。 由於 **Parallel Code Phase Search** 模組已經提供了精確的初始相位與頻率偏移，韌體僅需在 `Refine` 階段進行最後的窄頻對齊，即可直接跳轉至 `Pull-in` 鎖定，取代了訊號擷取耗時的搜尋流程。
+
+### 6.4 訊號擷取模式配置 (Acquisition Mode Configuration)
+
+本專案之基頻硬體搜尋策略支援在編譯時期（Compile-time）進行靜態配置。透過修改硬體描述層的巨集定義，即可自由切換 `Serial Search` 或是 `Hybrid (Parallel Code Phase Search + Serial Search)`。
+
+* **檔案位置**：`firmware/hps_core/DE10_serial_parallel/INC/namuru.h`
+* **巨集定義切換**：透過註解控制以下巨集定義即可完成切換：
+
+    ```c
+    // Hybrid mode (Parallel Code Phase Search + Serial Search)
+    #define ACQ_MODE_SYSTEM ACQ_MODE_HYBRID
+
+    // Only Serial Search
+    // #define ACQ_MODE_SYSTEM ACQ_MODE_SERIAL
+    ```
 
 ## 7. 已知問題與解決方案 (Known Issues)
 * **Linker Warning L6329W**: 

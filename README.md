@@ -44,8 +44,8 @@
 
 3. [firmware](firmware/) (Arm DS Project)
     > 負責執行於 HPS (ARM Cortex-A9) 之接收器韌體，透過 Avalon Bus 控制硬體暫存器。
-   - [**hps_core/**](firmware/hps_core/)：**主要開發分支**。基於 ARM Compiler 6 (AC6) 環境開發，適用於新版系統驗證。
-   - [**hps_altera/**](firmware/hps_altera/)：**舊版相容分支**。基於 DS-5 (AC5) 環境開發，專供實驗室特定版權工作站使用。
+   - [**hps_core/**](firmware/hps_core/)：**主要開發分支**。基於 ARM Compiler 6 (AC6) 環境開發，適用於個人電腦驗證。
+   - [**hps_altera/**](firmware/hps_altera/)：**舊版相容分支**。基於 DS-5 (AC5) 環境開發，專供實驗室特定電腦驗證。
 
 4. [matlab](matlab/) (MATLAB Project)
     > 包含 GPS 衛星訊號擷取演算法的模擬程式碼。
@@ -76,10 +76,10 @@
    - **即時作業系統**: CMSIS RTOS v2 (基於 Keil RTX5)。
    - **除錯終端**: PuTTY。
 
-    > [!TIP]
-    > **環境申請與授權導引**
-    > 本專案韌體編譯依賴 TSRI 授權。關於如何向 TSRI 申請工具鏈、校園網路 DNS 正反查綁定等完整行政與技術流水線，請移步查閱申請文件：  
-    > 👉 **[TSRI 資源與開發環境申請指南 (docs/how_to_apply_ds5.md)](docs/how_to_apply_ds5.md)**
+   > [!TIP]
+   > **環境申請與授權導引**
+   > 本專案韌體編譯依賴 TSRI 授權。關於如何向 TSRI 申請工具鏈、校園網路 DNS 正反查綁定等，請移步查閱申請文件：  
+   > 👉 **[TSRI 資源與開發環境申請指南 (docs/how_to_apply_ds5.md)](docs/how_to_apply_ds5.md)**
 
 ## 4. 硬體接線與安全須知 (Hardware Connection)
 
@@ -119,18 +119,16 @@
 graph LR
     classDef mainState fill:#EBF3FF,stroke:#2F80ED,stroke-width:2px,color:#000000,rx:8,ry:8;
     classDef startState fill:#1E293B,stroke:#0F172A,stroke-width:2px,color:#FFFFFF,rx:50,ry:50;
-    
-    linkStyle default color:#000000,background-color:#FFFFFF,stroke-width:1px;
 
-    OFF((OFF)):::startState -->|Start| Acquire([Acquire]):::mainState
-    Acquire -->|Acq. Success| Confirm([Confirm]):::mainState
-    Confirm -->|Verify Pass| Pull-In(["Pull-In"]):::mainState
-    Pull-In -->|Pull-In Pass| Lock([Lock]):::mainState
+    OFF((OFF)):::startState -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Start</span>| Acquire([Acquire]):::mainState
+    Acquire -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Acq. Success</span>| Confirm([Confirm]):::mainState
+    Confirm -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Verify Pass</span>| Pull-In(["Pull-In"]):::mainState
+    Pull-In -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Pull-In Pass</span>| Lock([Lock]):::mainState
 
-    Acquire -->|Acq. Fail| OFF
-    Confirm -->|Verify Fail| Acquire
-    Pull-In -->|Pull-In Fail| Acquire
-    Lock -->|Lock Lost| Pull-In
+    Acquire -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Acq. Fail</span>| OFF
+    Confirm -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Verify Fail</span>| Acquire
+    Pull-In -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Pull-In Fail</span>| Acquire
+    Lock -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Lock Lost</span>| Pull-In
 ```
 
 <p><i>圖：狀態機 - 原始架構</i></p>
@@ -144,16 +142,14 @@ graph LR
 graph LR
     classDef mainState fill:#EBF3FF,stroke:#2F80ED,stroke-width:2px,color:#000000,rx:8,ry:8;
     classDef startState fill:#1E293B,stroke:#0F172A,stroke-width:2px,color:#FFFFFF,rx:50,ry:50;
-    
-    linkStyle default color:#000000,background-color:#FFFFFF,stroke-width:1px;
 
-    OFF((OFF)):::startState -->|Parallel Search Done| Refine([Refine]):::mainState
-    Refine -->|Refine Pass| Pull-In(["Pull-In"]):::mainState
-    Pull-In -->|Pull-In Pass| Lock([Lock]):::mainState
+    OFF((OFF)):::startState -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Parallel Search Done</span>| Refine([Refine]):::mainState
+    Refine -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Refine Pass</span>| Pull-In(["Pull-In"]):::mainState
+    Pull-In -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Pull-In Pass</span>| Lock([Lock]):::mainState
 
-    Refine -->|Refine Fail| OFF
-    Pull-In -->|Pull-In Fail| OFF
-    Lock -->|Lock Lost| Pull-In
+    Refine -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Refine Fail</span>| OFF
+    Pull-In -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Pull-In Fail</span>| OFF
+    Lock -->|<span style='color:black;background:white;padding:2px_5px;border-radius:3px;'>Lock Lost</span>| Pull-In
 ```
 <p><i>圖：狀態機 - 混合架構</i></p>
 </div>
@@ -249,8 +245,7 @@ graph LR
 <br/>
 
 > [!NOTE]
-> **導航電文傳輸之物理限制 (Technical Constraints)**
-> 系統首次定位時間（TTFF）之時間限制，受限於 GPS 導航電文的廣播結構：
-> * **50 bps 極低速率**：導航電文之實體層傳輸速率固定為每秒 50 bits。
-> * **18 秒解調下限**：定位必備的完整星曆（Ephemeris）散佈於子框架（Subframe）#1、#2 與 #3。每個子框架長度為 300 bits（耗時 6 秒），**物理上光是完整下載這三組數據，就至少需要 18 秒的連續解調時間。**
-> * **框架同步等待**：上述 18 秒尚未包含開機後捕捉電文前導字元（Preamble）以達成框架同步的時間差（Preamble 每 6 秒廣播一次）。
+> **為什麼冷啟動 (Cold Start) 解讀導航電文至少需要 18 秒？**
+> * **導航電文傳輸速率**：固定只有 50 bps（每秒 50 bits）。
+> * **必備資料框 (Data Frame)**：定位解算前，韌體必須完整取得子框架 (Subframe) #1、#2 與 #3。
+> * **解讀時間**：每個子框架長度為 300 bits（耗時 6 秒），連續下載並解讀完這三個必備子框架（共 900 bits），**至少需要 18 秒的連續傳輸時間**（尚未包含冷啟動後捕捉前導字元以達成框架同步的時間差）。
