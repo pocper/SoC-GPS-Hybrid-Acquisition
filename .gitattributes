@@ -4,5 +4,4 @@ rtl/verilog/*_hw.tcl linguist-generated=true
 
 rtl/*.sdc linguist-generated=true
 
-firmware/hps_core/DE10_serial_parallel/RTE/** linguist-generated=true
-firmware/hps_altera/DE10_serial_parallel/RTE/** linguist-generated=true
+**/RTE/**/* linguist-vendored
