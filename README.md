@@ -12,10 +12,11 @@
   - [5. 演算法架構與狀態機 (Alogorithm \& Finite State Machine)](#5-演算法架構與狀態機-alogorithm--finite-state-machine)
   - [6. 程式燒錄與執行順序 (Programming Sequence)](#6-程式燒錄與執行順序-programming-sequence)
   - [7. 運行結果與驗證 (Experimental Results)](#7-運行結果與驗證-experimental-results)
-    - [1. 測試設備 (Testing Equipment)](#1-測試設備-testing-equipment)
-    - [2. 核心運算耗時對比 (Core Algorithm Performance)](#2-核心運算耗時對比-core-algorithm-performance)
-    - [3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance \& TTFF)](#3-全系統定位效能與-ttff-綜合對比-system-level-performance--ttff)
-    - [4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)](#4-觀測組-5-次獨立實測原始數據紀錄-raw-experimental-data)
+    - [7.1 測試設備 (Testing Equipment)](#71-測試設備-testing-equipment)
+    - [7.2. 核心運算耗時對比 (Core Algorithm Performance)](#72-核心運算耗時對比-core-algorithm-performance)
+    - [7.3 全系統定位效能與 TTFF 綜合對比 (System-Level Performance \& TTFF)](#73-全系統定位效能與-ttff-綜合對比-system-level-performance--ttff)
+    - [7.4 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)](#74-觀測組-5-次獨立實測原始數據紀錄-raw-experimental-data)
+    - [7.5 系統定位與速度解算驗證 (PVT Verification)](#75-系統定位與速度解算驗證-pvt-verification)
 
 ## 1. 系統架構 (System Architecture)
 
@@ -171,7 +172,7 @@ graph LR
 
 本專案透過硬體模擬器驗證接收器於不同場景下的定位效能。
 
-### 1. 測試設備 (Testing Equipment)
+### 7.1 測試設備 (Testing Equipment)
 若需重現驗證結果，請參閱 **[docs/emulator.md](docs/emulator.md)** 之操作指引配置硬體環境。
 
 | 實驗環境變數 (Parameter) | 實體軟硬體配置與參數 (Configuration Details)             |
@@ -182,7 +183,7 @@ graph LR
 | **系統排程頻率**         | CMSIS-RTOS v2 / Keil RTX5 (OS Tick Freuqency: 1000 Hz) |
 | **統計實驗次數**         | 5 次獨立重複實驗 (5 Trials per Power Level)              |
 
-### 2. 核心運算耗時對比 (Core Algorithm Performance)
+### 7.2. 核心運算耗時對比 (Core Algorithm Performance)
 下表展示了 SoC 平台在相同搜尋範圍下，執行不同基頻擷取演算法的純硬體運算耗時統計：
 
 | 訊號擷取演算法         | 衛星數量 | 頻率搜索範圍 [kHz] | 總體執行時間 [ms] | 核心運算加速比 |
@@ -195,7 +196,7 @@ graph LR
 
 <small>**註2**：直接搜尋法可透過在 FPGA 上配置多組實體硬體通道平行搜尋不同衛星，以降低總體執行時間。</small>
 
-### 3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance & TTFF)
+### 7.3 全系統定位效能與 TTFF 綜合對比 (System-Level Performance & TTFF)
 本實驗測試共用相同之基頻硬體資源（Parallel Search 模組與 13 組序列硬體相關器通道），純粹透過 **ARM 韌體排程狀態機 (FSM) 的調度策略分流**，對比系統首次定位時間（Time To First Fix, TTFF）的實測結果：
 
    * **混合架構 (Parallel Code Phase Search + Serial Search)**：完整驅動 FPGA 內之 Parallel Code Phase Search 硬體加速模組進行全星座快速擷取，隨後動態將參數分派予 13 組序列硬體相關器（Serial Correlator）進行精細微調與追蹤。
@@ -215,7 +216,13 @@ graph LR
 
 <small>**註2**：訊號功率降至 `-130 dBm` 時，在當前配置之積分時間（Parallel Code Phase Search: 2 ms / Serial: 1 ms）限制下，相關峰值已無法超越雜訊基底，故不論何種調度模式皆無法達成穩定鎖定。</small>
 
-### 4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)
+> [!NOTE]
+> **為什麼冷啟動 (Cold Start) 解讀導航電文至少需要 18 秒？**
+> * **導航電文傳輸速率**：固定只有 50 bps（每秒 50 bits）。
+> * **必備資料框 (Data Frame)**：定位解算前，韌體必須完整取得子框架 (Subframe) #1、#2 與 #3。
+> * **解讀時間**：每個子框架長度為 300 bits（耗時 6 秒），連續下載並解讀完這三個必備子框架（共 900 bits），**至少需要 18 秒的連續傳輸時間**（尚未包含冷啟動後捕捉前導字元以達成框架同步的時間差）。
+
+### 7.4 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)
 若需核對或重現統計大表中的範圍區間，可展開下方摺疊面板檢視各組 Run 1 ~ Run 5 的詳細觀測值：
 
 <details>
@@ -239,8 +246,23 @@ graph LR
 </details>
 <br/>
 
-> [!NOTE]
-> **為什麼冷啟動 (Cold Start) 解讀導航電文至少需要 18 秒？**
-> * **導航電文傳輸速率**：固定只有 50 bps（每秒 50 bits）。
-> * **必備資料框 (Data Frame)**：定位解算前，韌體必須完整取得子框架 (Subframe) #1、#2 與 #3。
-> * **解讀時間**：每個子框架長度為 300 bits（耗時 6 秒），連續下載並解讀完這三個必備子框架（共 900 bits），**至少需要 18 秒的連續傳輸時間**（尚未包含冷啟動後捕捉前導字元以達成框架同步的時間差）。
+### 7.5 系統定位與速度解算驗證 (PVT Verification)
+
+本研究在系統鎖定穩態後進行定量分析，以驗證底層基頻演算法之絕對正確性，其實驗配置與統計要點如下：
+
+* **PVT 更新率**：**10 Hz**（每 100 ms 解算一次）。
+* **統計樣本數量**：定位成功期間，連續紀錄 **1,259 筆 有效觀測樣本**。
+
+| 效能參數                 | 模擬器真實值      | 接收機實測平均值   | 實測誤差與統計指標   |
+| :----------------------- | :--------------: | :--------------: | :----------------- |
+| **ECEF X 軸位置**         | `+6378137.000 m` | `+6378135.534 m` | **1.466 m** (MAE)  |
+| **ECEF Y 軸位置**         | `0.000 m`        | `-0.342 m`       | **0.342 m** (MAE)  |
+| **ECEF Z 軸位置**         | `0.000 m`        | `-0.245 m`       | **0.245 m** (MAE)  |
+| **平均定位誤差**           | `0.000 m`       | —                | **6.492 m**  (3D 空間平均定位誤差) |
+| **定位穩定度 (SD)**        | `0.000 m`       | —                | **4.620 m**         |
+| **最大定位誤差**           | —               | —                | **41.799 m**        |
+| **參與定位衛星顆數**       | `10 顆`          | `10 顆`         | 訊號追蹤階段無失去鎖定 |
+| **ECEF X 軸速度 ($V_x$)** | `0.000 m/s`      | —               | **0.633 m/s** (RMSE) |
+| **ECEF Y 軸速度 ($V_y$)** | `0.000 m/s`      | —               | **0.245 m/s** (RMSE) |
+| **ECEF Z 軸速度 ($V_z$)** | `0.000 m/s`      | —               | **0.331 m/s** (RMSE) |
+| **平均速度誤差**           | `0.000 m/s`      | —              | **0.756 m/s** (3D 空間平均速度誤差) |
