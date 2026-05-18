@@ -29,9 +29,7 @@
 #include CMSIS_device_header
 #include "irq_ctrl.h"
 
-// #define  SYSTEM_CLOCK  12000000U
-// #define  SYSTEM_CLOCK  800000000U
-#define  SYSTEM_CLOCK  200000000U
+#define  SYSTEM_CLOCK  231250000U
 
 /*----------------------------------------------------------------------------
   System Core Clock Variable

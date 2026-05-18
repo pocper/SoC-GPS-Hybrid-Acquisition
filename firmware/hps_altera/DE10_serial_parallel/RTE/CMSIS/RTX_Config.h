@@ -102,7 +102,7 @@
 //     <i> Applies to user threads with system provided memory for control blocks.
 #ifndef OS_THREAD_NUM
 // #define OS_THREAD_NUM               1
-#define OS_THREAD_NUM               6
+#define OS_THREAD_NUM               8
 #endif
  
 //     <o>Number of user Threads with default Stack size <0-1000>

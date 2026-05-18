@@ -88,7 +88,6 @@
 
 #define CORRELATION_SIZE 0x01500000
 #define DATA_CDC_SIZE    0x00004000
-#define DATA_DEBUG_SIZE  0x00083D60
 
 /*----------------------------------------------------------------------------*/
 

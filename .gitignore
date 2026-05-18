@@ -53,6 +53,7 @@ Debug/
 .metadata/
 RemoteSystemsTempFiles/
 config_hardware/
+u-boot-spl
 *.bak
 *.log
 firmware/hps_altera/debugger

@@ -1,0 +1,7 @@
+rtl/ip/** linguist-generated=true
+
+rtl/verilog/*_hw.tcl linguist-generated=true
+
+rtl/*.sdc linguist-generated=true
+
+firmware/**/RTE/** linguist-generated=true
