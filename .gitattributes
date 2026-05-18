@@ -4,4 +4,6 @@ rtl/verilog/*_hw.tcl linguist-generated=true
 
 rtl/*.sdc linguist-generated=true
 
-firmware/**/RTE/** linguist-generated=true
+firmware/**/RTE/**/*.c linguist-generated=true
+firmware/**/RTE/**/*.h linguist-generated=true
+firmware/**/RTE/**/*.sct linguist-generated=true

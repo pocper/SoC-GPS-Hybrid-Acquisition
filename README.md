@@ -20,12 +20,10 @@
 
 ## 1. 系統架構 (System Architecture)
 
-<div style="text-align: center; margin: 20px 0;">
+<center>
   <img src="image/system_architecture_block_diagram.png" alt="系統架構" width="600">
-  <p style="margin-top: 10px;">
-  <i>圖：系統架構圖</i>
-  </p>
-</div>
+  <p style="margin-top: 10px;"><i>圖：系統架構圖</i></p>
+</center>
 
 本系統主要分為三大模組：
 1. **RF Front-End**: 負責GPS L1訊號降採樣(Downsampling)。
@@ -35,36 +33,29 @@
 ## 2. 目錄導覽 (Repository Structure)
 
 1. [pcb frontend](pcb_frontend/) (Altium Designer Project)
-
-包含自製 MAX2769 RF 模組的設計檔案。
+    > 包含自製 MAX2769 RF 模組的設計檔案。
    - **硬體版本**: 目前推薦使用 **v3**。
    - **內容**: Altium Designer 專案、電路圖 (PDF)、製作與維修紀錄。
 
 2. [rtl](rtl/) (Quartus Project)
-
-包含部署於 FPGA 端的 Verilog 原始碼與 Intel Quartus Prime 專案檔。
+    > 包含部署於 FPGA 端的 Verilog 原始碼與 Intel Quartus Prime 專案檔。
    - **核心模組**: 包含 Parallel Code Phase Search 與 Serial Search 之雙重訊號擷取架構。
    - **環境**: Intel Quartus Prime。
    - **重點**: 針對硬體並行化處理進行優化，減少擷取所需時間。
 
 3. [firmware](firmware/) (Arm DS Project)
-
-包含執行於 HPS (ARM Cortex-A9) 的韌體程式碼。
-   - **主要功能**: 透過 SoC Bridge 控制硬體暫存器、管理 correlator 數據。
-   - **環境**: Intel SoC EDS / VS Code。
-   - [**hps_core/**](firmware/hps_core/): **主要開發分支**。使用 Arm DS (AC6) 編譯，需透過校園網路向 TSRI 申請授權，**[詳細編譯與專案設定請見此目錄 README]**。
-   - [**hps_altera/**](firmware/hps_altera/): **舊版相容分支**。使用 DS-5 (AC5) 編譯，專為實驗室內建有「買斷版授權」之 DS-5 Altera Edition 筆電設計，**[詳細編譯與專案設定請見此目錄 README]**。
+    > 負責執行於 HPS (ARM Cortex-A9) 之接收器韌體，透過 Avalon Bus 控制硬體暫存器。
+   - [**hps_core/**](firmware/hps_core/)：**主要開發分支**。基於 ARM Compiler 6 (AC6) 環境開發，適用於新版系統驗證。
+   - [**hps_altera/**](firmware/hps_altera/)：**舊版相容分支**。基於 DS-5 (AC5) 環境開發，專供實驗室特定版權工作站使用。
 
 4. [matlab](matlab/) (MATLAB Project)
-
-包含 GPS 衛星訊號擷取演算法的模擬程式碼。
+    > 包含 GPS 衛星訊號擷取演算法的模擬程式碼。
    - **主要功能**: 實現了平行碼相位搜尋演算法(Parallel Code Phase Search)。
    - **環境**: MATLAB。
    - **重點**: 作為演算法的功能模擬與設計標準，用於提前驗證演算法可行性，並作為後續 SoC 硬體開發時比對資料正確性的主要依據。
 
 5. [document](docs/)
-
-存放專案相關的技術文件與操作指南。
+    > 存放專案相關的技術文件與操作指南。
    - [**how_to_apply_ds5.md**](docs/how_to_apply_ds5.md): **環境申請指南** (含 TSRI 資源、校園 DNS 正反查申請)。
    - [**emulator.md**](docs/emulator.md): **硬體操作手冊** (Agilent E4438C 與 Spirent GSS7000 操作流程)。
    - [**register_map.md**](docs/register_map.md): **暫存器映射表**。定義 HPS 與 FPGA  之間的通訊位址。
@@ -90,7 +81,10 @@
 
 ## 4. 硬體接線與安全須知 (Hardware Connection)
 
-<img src="image/system_connection_overview.jpg" alt="系統接線總覽" width="600">
+<center>
+  <img src="image/system_connection_overview.jpg" alt="系統接線總覽" width="600">
+  <p style="margin-top: 10px;"><i>圖：SoC GPS 接收器實驗驗證平台與硬體接線總覽</i></p>
+</center>
 
 1. **JTAG 偵錯**：將 mini-USB 連接至 DE10-Nano 的 **J13** 孔位並連接電腦 (用於 Quartus 燒錄及 DS-5 除錯)。
 2. **UART 監控**：將 mini-USB 連接至 DE10-Nano 的 **J4**  孔位並連接電腦 (用於查看 HPS 端 UART Console 輸出結果)。
@@ -106,62 +100,61 @@
 
 ## 5. 演算法架構與狀態機 (Alogorithm & Finite State Machine)
 
-<div style="text-align: center; margin: 20px 0;">
+<center>
   <img src="image/serial_search_architecture.png" alt="Serial Search 架構" width="600">
-  <p style="margin-top: 10px;">
-  <i>圖：Serial Search 模組硬體架構圖</i>
-  </p>
-</div>
+  <p style="margin-top: 10px;"><i>圖：Serial Search 模組硬體架構圖</i></p>
+</center>
 
-<div style="text-align: center; margin: 20px 0;">
+<center>
   <img src="image/parallel_code_phase_search_architecture.png" alt="Parallel Code Phase Search 架構" width="600">
-  <p style="margin-top: 10px;">
-  <i>圖：Parallel Code Phase Search 模組硬體架構圖</i>
-  </p>
-</div>
+  <p style="margin-top: 10px;"><i>圖：Parallel Code Phase Search 模組硬體架構圖</i></p>
+</center>
 
-<div style="max-width: 500px; margin: 0 auto;">
+
+<center>
 
 ``` mermaid
 graph LR
-    subgraph ORIG [Original Architecture]
-        direction LR
-        OFF([OFF]) --> Acquire([Acquire])
-        Acquire --> Confirm([Confirm])
-        Confirm --> Pull-in([Pull-in])
-        Pull-in --> Lock([Lock])
-        
-        Acquire -- Fail --> OFF
-        Confirm -- Fail --> Acquire
-        Pull-in -- Fail --> Acquire
-        Lock -- Lost --> Pull-in
-    end
+    classDef mainState fill:#EBF3FF,stroke:#2F80ED,stroke-width:2px,color:#000000,rx:8,ry:8;
+    classDef startState fill:#1E293B,stroke:#0F172A,stroke-width:2px,color:#FFFFFF,rx:50,ry:50;
     
-    style ORIG fill:#fff,stroke:#333,stroke-width:2px
+    linkStyle default color:#000000,background-color:#FFFFFF,stroke-width:1px;
+
+    OFF((OFF)):::startState -->|Start| Acquire([Acquire]):::mainState
+    Acquire -->|Acq. Success| Confirm([Confirm]):::mainState
+    Confirm -->|Verify Pass| Pull-In(["Pull-In"]):::mainState
+    Pull-In -->|Pull-In Pass| Lock([Lock]):::mainState
+
+    Acquire -->|Acq. Fail| OFF
+    Confirm -->|Verify Fail| Acquire
+    Pull-In -->|Pull-In Fail| Acquire
+    Lock -->|Lock Lost| Pull-In
 ```
-<p align="center"><i>圖：狀態機 - 原始架構</i></p>
-</div>
 
-<div style="max-width: 500px; margin: 0 auto;">
+<p><i>圖：狀態機 - 原始架構</i></p>
+</center>
+
+<br/>
+
+<center>
 
 ``` mermaid
 graph LR
-    subgraph HYB [Hybrid Architecture]
-        direction LR
-        OFF([OFF]) --> Acquire([Acquire])
-        Acquire --> Refine([Refine])
-        Refine --> Pull-in([Pull-in])
-        Pull-in --> Lock([Lock])
-        
-        Acquire -- Fail --> OFF
-        Pull-in -- Fail --> OFF
-        Lock -- Lost --> Pull-in
-    end
+    classDef mainState fill:#EBF3FF,stroke:#2F80ED,stroke-width:2px,color:#000000,rx:8,ry:8;
+    classDef startState fill:#1E293B,stroke:#0F172A,stroke-width:2px,color:#FFFFFF,rx:50,ry:50;
     
-    style HYB fill:#fff,stroke:#333,stroke-width:1px
+    linkStyle default color:#000000,background-color:#FFFFFF,stroke-width:1px;
+
+    OFF((OFF)):::startState -->|Parallel Search Done| Refine([Refine]):::mainState
+    Refine -->|Refine Pass| Pull-In(["Pull-In"]):::mainState
+    Pull-In -->|Pull-In Pass| Lock([Lock]):::mainState
+
+    Refine -->|Refine Fail| OFF
+    Pull-In -->|Pull-In Fail| OFF
+    Lock -->|Lock Lost| Pull-In
 ```
 <p align="center"><i>圖：狀態機 - 混合架構</i></p>
-</div>
+</center>
 
 ## 6. 程式燒錄與執行順序 (Programming Sequence)
 
@@ -208,6 +201,7 @@ graph LR
 | **碼相位平行搜尋法**   | 32 顆   | $0 \pm 10$        | **117.65**       | **686x**      |
 
 <small>**註1**：直接搜尋法之執行時間為完整搜尋所有二維搜尋空間之最大耗時。若於搜尋空間中先行命中載波頻率及碼相位，程式會提早結束。</small>
+
 <small>**註2**：直接搜尋法可透過在 FPGA 上配置多組實體硬體通道平行搜尋不同衛星，以降低總體執行時間。</small>
 
 ### 3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance & TTFF)
@@ -216,7 +210,7 @@ graph LR
    * **混合架構 (Parallel Code Phase Search + Serial Search)**：完整驅動 FPGA 內之 Parallel Code Phase Search 硬體加速模組進行全星座快速擷取，隨後動態將參數分派予 13 組序列硬體相關器（Serial Correlator）進行精細微調與追蹤。
    * **單一架構 (Serial Search)**：於軟體層面將 Parallel 加速器暫存器關閉，冷啟動後純依賴 13 組通道進行時域與頻域的逐點掃描。為了排除純韌體超時輪詢變因、專注比對硬體搜尋物理速度，此模式下開機**預先指派模擬器中存在的 10 顆存在衛星號碼（指定 PRN）**。
 
-| 模擬器功率 [dBm] | 架構     | 4 顆衛星達成鎖定鎖定耗時 [s] <br>(範圍 / 平均值) | 首次定位時間 (TTFF) [s] <br>(範圍 / 平均值) | **硬體搜尋加速比** |
+| 模擬器功率 [dBm] | 架構     | 4 顆衛星達成鎖定之耗時 [s] <br>(範圍 / 平均值) | 首次定位時間 [s] <br>(範圍 / 平均值) | **硬體搜尋加速比** |
 | :-------------: | :------: | :-------------------------------------------: | :---------------------------------------: | :---------------: |
 | **-115**        | 單一      | 19.073 ~ 28.095 (**23.902**)                 | 51.233 ~ 60.218 (**55.570**)              | 基準 (1.0x)       |
 |                 | 混合      | 1.122 ~ 3.206 (**2.139**)                    | 26.085 ~ 39.069 (**31.465**)              | **11.17x 加速**   |
@@ -227,6 +221,7 @@ graph LR
 | **-130**        | 單一/混合 | —                                            | —                                         | **註2**           |
 
 <small>**註1**：在 `-125 dBm` 下，混合架構因頻率觀測頻寬較寬（500 Hz vs. Serial 125 Hz），致使單一頻率分度（Bin）內累積之總雜訊功率較高。在弱訊號下，真實訊號極易低於硬體偵測門檻而遭誤判，狀態機須反覆驗證，故鎖定耗時拉長。</small>
+
 <small>**註2**：訊號功率降至 `-130 dBm` 時，在當前配置之積分時間（Parallel Code Phase Search: 2 ms / Serial: 1 ms）限制下，相關峰值已無法超越雜訊基底，故不論何種調度模式皆無法達成穩定鎖定。</small>
 
 ### 4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)
@@ -251,6 +246,7 @@ graph LR
 | **-120**            | 23.083 / 25.171 / 20.245 / 19.143 / 20.129 <br> **[Mean: 21.554]** | 56.133 / 46.075 / 53.237 / 48.005 / 47.221 <br> **[Mean: 50.134]** |
 | **-125**            | 32.026 / 25.234 / 31.201 / 27.118 / 31.176 <br> **[Mean: 29.351]** | 61.137 / 47.057 / 65.145 / 74.192 / 60.025 <br> **[Mean: 61.511]** |
 </details>
+<br/>
 
 > [!NOTE]
 > **導航電文傳輸之物理限制 (Technical Constraints)**

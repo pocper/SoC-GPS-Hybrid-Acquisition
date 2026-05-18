@@ -25,12 +25,10 @@
 ## 設備一：Agilent E4438C ESG Vector Signal Generator
 本設備主要用於播放預錄的 GPS L1 訊號。
 
-<div style="text-align: center; margin: 20px 0;">
+<center>
   <img src="../image/GPS_simulator_E4438C.png" alt="Agilent_E4438C" width="600">
-  <p style="margin-top: 10px;">
-  <i>圖：Agilent E4438C ESG Vector Signal Generator</i>
-  </p>
-</div>
+  <p style="margin-top: 10px;"><i>圖：Agilent E4438C ESG Vector Signal Generator</i></p>
+</center>
 
 ### 功能說明
 
@@ -73,12 +71,10 @@
 
 本設備為高階多頻段訊號模擬器，支援 GPS (L1/L5) 與 GLONASS (L1/L2) 等多系統同時模擬。
 
-<div style="text-align: center; margin: 20px 0;">
+<center>
   <img src="../image/gss7000_simreplay_overview.jpg" alt="gss7000_simreplay_overview" width="600">
-  <p style="margin-top: 10px;">
-  <i>圖：Spirent GSS7000 Signal Generator</i>
-  </p>
-</div>
+  <p style="margin-top: 10px;"><i>圖：Spirent GSS7000 Signal Generator</i></p>
+</center>
 
 ### 操作流程
 1. 硬體與軟體啟動
