@@ -49,7 +49,7 @@
 ### 3. 關閉虛擬記憶體管理單元 (Disable MMU)
 
   * **檢視檔案**：專案目錄下的 `RTE/Device/ARMCA9/system_ARMCA9.c` (內部的 `SystemInit` 函數)
-  * **修正原理**：在即時作業系統（RTOS）與 HPS 硬體混合架構下，為了讓 CPU 核心直接透過實體位址存取 FPGA 側的記憶體對映 (Memory-mapped) 暫存器（`0xFF200000`）與核心周邊，專案中已將預設開啟的 MMU 轉譯功能關閉（註解化）。
+  * **修正原理**：在即時作業系統（RTOS）與 HPS 硬體混合架構下，為了讓 CPU 核心直接透過實體位址存取 FPGA 側的記憶體對映 (Memory-mapped) 暫存器（`0xFF200000`）與核心周邊，專案中已將預設開啟的 MMU 轉譯功能改為停用。
 
   * **正確配置核對 (After)**：
       ```c
@@ -125,4 +125,4 @@
 
 * **[Intel Cyclone V HPS Address Map](https://www.intel.com/content/www/us/en/programmable/hps/cyclone-v/hps.html)**: 詳列 HPS 暫存器定義、中斷 ID 以及 Lightweight HPS-to-FPGA Bridge 的物理位址映射。
 * **[Cyclone® V Hard Processor System Technical Reference Manual](https://www.intel.com/programmable/technical-pdfs/683126.pdf)**: 官方技術手冊，主要參考第 2 章的 Clock Manager 與 Private Timer 時脈分頻架構。
-* **[CSDN 參考文獻：Cortex-A9 RTOS 移植踩坑紀錄](https://blog.csdn.net/qq_28576837/article/details/124969857)**: 關於通用 CMSIS 軟體包在 Cortex-A9 實體硬體上重對映的底層邏輯參考。
+* **[CSDN 參考文獻：Cortex-A9 RTOS 移植異常分析與解決對策](https://blog.csdn.net/qq_28576837/article/details/124969857)**: 關於通用 CMSIS 軟體包在 Cortex-A9 實體硬體上重對映的底層邏輯參考。

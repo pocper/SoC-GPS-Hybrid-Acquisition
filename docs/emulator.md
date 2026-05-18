@@ -5,10 +5,10 @@
 
 ## GPS 訊號模擬器 (GNSS Emulators)
 
-| 設備名稱               | 型號    | 支援頻段與功能                                            |
-| --------------------- | ------- | -------------------------------------------------------- |
-| **Agilent ESG**       | E4438C  | 支援 GPS L1 靜態/預錄場景播放。                            |
-| **Spirent Simulator** | GSS7000 | 支援多系統 (GPS/GLONASS) 與多頻段 (L1/L2/L5) 動態軌跡模擬。 |
+| 設備名稱               | 型號    | 支援頻段與功能                                                |
+| --------------------- | ------- | ------------------------------------------------------------ |
+| **Agilent ESG**       | E4438C  | 支援 GPS L1 靜態/預錄場景播放。                                |
+| **Spirent Simulator** | GSS7000 | 支援多系統 (GPS/GLONASS) 與多頻段 (L1/L5, G1/G2) 動態軌跡模擬。 |
 
 ## 目錄
 - [GPS 訊號模擬器操作指南 (GPS Emulator Guide)](#gps-訊號模擬器操作指南-gps-emulator-guide)
@@ -25,10 +25,10 @@
 ## 設備一：Agilent E4438C ESG Vector Signal Generator
 本設備主要用於播放預錄的 GPS L1 訊號。
 
-<center>
+<div align="center">
   <img src="../image/GPS_simulator_E4438C.png" alt="Agilent_E4438C" width="600">
   <p style="margin-top: 10px;"><i>圖：Agilent E4438C ESG Vector Signal Generator</i></p>
-</center>
+</div>
 
 ### 功能說明
 
@@ -69,12 +69,12 @@
 
 ## 設備二：Spirent GSS7000 Signal Generator
 
-本設備為高階多頻段訊號模擬器，支援 GPS (L1/L5) 與 GLONASS (L1/L2) 等多系統同時模擬。
+本設備為高階多頻段訊號模擬器，支援 GPS (L1/L5) 與 GLONASS (G1/G2) 等多系統同時模擬。
 
-<center>
+<div align="center">
   <img src="../image/gss7000_simreplay_overview.jpg" alt="gss7000_simreplay_overview" width="600">
   <p style="margin-top: 10px;"><i>圖：Spirent GSS7000 Signal Generator</i></p>
-</center>
+</div>
 
 ### 操作流程
 1. 硬體與軟體啟動

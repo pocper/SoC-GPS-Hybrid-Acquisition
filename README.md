@@ -17,13 +17,12 @@
     - [3. 全系統定位效能與 TTFF 綜合對比 (System-Level Performance \& TTFF)](#3-全系統定位效能與-ttff-綜合對比-system-level-performance--ttff)
     - [4. 觀測組 5 次獨立實測原始數據紀錄 (Raw Experimental Data)](#4-觀測組-5-次獨立實測原始數據紀錄-raw-experimental-data)
 
-
 ## 1. 系統架構 (System Architecture)
 
-<center>
+<div align="center">
   <img src="image/system_architecture_block_diagram.png" alt="系統架構" width="600">
   <p style="margin-top: 10px;"><i>圖：系統架構圖</i></p>
-</center>
+</div>
 
 本系統主要分為三大模組：
 1. **RF Front-End**: 負責GPS L1訊號降採樣(Downsampling)。
@@ -64,27 +63,30 @@
 ## 3. 開發環境配置 (Development Setup)
 
 1. 硬體需求
-   - **FPGA Board**: Terasic DE10-Nano (Cyclone V SoC)。
-   - **RF Module**: 自製 MAX2769 模組 (GPSR_frontend_v3)。
-   - **Antenna**: 主動式 GPS 天線。
+   - **SoC開發板**: Terasic DE10-Nano (Cyclone V SoC)。
+   - **射頻前端模組**: 自製 MAX2769 模組 (GPSR_frontend_v3)。
+   - **訊號輸入源**: 
+     1. **驗證配置**：經由同軸纜線連接至 Spirent GSS7000 訊號產生器。
+     2. **實際配置 (未來)**：連接主動式 GPS 天線（需外接偏置電壓）。
 
 2. 開發環境
-   - **FPGA**: Quartus Prime (建議 25.1 或以上版本)。
-   - **Hardware-Software Bridge**: Intel SoC EDS Embedded Development Suite (提供硬體與韌體間的運作函式庫)。
-   - **Firmware IDE**: Arm Development Studio (TSRI 建議 23.1 或以上版本) 或 DS-5 Altera Edition (實驗室筆電買斷版)。
-   - **OS**: CMSIS RTOS (運行於 HPS 端)。
-   - **Terminal**: PuTTY (查看 HPS 執行狀態)。
+   - **硬體開發**: Quartus Prime (建議 25.1 或以上版本) & Platform Designer。
+   - **硬體/韌體函式庫**: Intel SoC EDS Embedded Development Suite (Version 20.1)。
+   - **韌體開發環境**: Arm Development Studio (Version 2023.1) 或 DS-5 Altera Edition (Version 5.29.1)。
+   - **即時作業系統**: CMSIS RTOS v2 (基於 Keil RTX5)。
+   - **除錯終端**: PuTTY。
 
-3. 授權取得方式 (TSRI 申請 vs. 實驗室筆電)
-  1. **個人電腦開發**：需透過校園網路與 TSRI 驗證，請參閱 **[how_to_apply_ds5.md](docs/how_to_apply_ds5.md)** 完成 IP 正反查申請。
-  2. **實驗室筆電開發**：若使用實驗室特定筆電，可直接使用已安裝之 **DS-5 Altera Edition** 進行 `hps_altera` 分支的開發，無需額外申請 TSRI 授權。
+    > [!TIP]
+    > **環境申請與授權導引**
+    > 本專案韌體編譯依賴 TSRI 授權。關於如何向 TSRI 申請工具鏈、校園網路 DNS 正反查綁定等完整行政與技術流水線，請移步查閱申請文件：  
+    > 👉 **[TSRI 資源與開發環境申請指南 (docs/how_to_apply_ds5.md)](docs/how_to_apply_ds5.md)**
 
 ## 4. 硬體接線與安全須知 (Hardware Connection)
 
-<center>
+<div align="center">
   <img src="image/system_connection_overview.jpg" alt="系統接線總覽" width="600">
   <p style="margin-top: 10px;"><i>圖：SoC GPS 接收器實驗驗證平台與硬體接線總覽</i></p>
-</center>
+</div>
 
 1. **JTAG 偵錯**：將 mini-USB 連接至 DE10-Nano 的 **J13** 孔位並連接電腦 (用於 Quartus 燒錄及 DS-5 除錯)。
 2. **UART 監控**：將 mini-USB 連接至 DE10-Nano 的 **J4**  孔位並連接電腦 (用於查看 HPS 端 UART Console 輸出結果)。
@@ -100,18 +102,18 @@
 
 ## 5. 演算法架構與狀態機 (Alogorithm & Finite State Machine)
 
-<center>
+<div align="center">
   <img src="image/serial_search_architecture.png" alt="Serial Search 架構" width="600">
   <p style="margin-top: 10px;"><i>圖：Serial Search 模組硬體架構圖</i></p>
-</center>
+</div>
 
-<center>
+<div align="center">
   <img src="image/parallel_code_phase_search_architecture.png" alt="Parallel Code Phase Search 架構" width="600">
   <p style="margin-top: 10px;"><i>圖：Parallel Code Phase Search 模組硬體架構圖</i></p>
-</center>
+</div>
 
 
-<center>
+<div align="center">
 
 ``` mermaid
 graph LR
@@ -132,11 +134,11 @@ graph LR
 ```
 
 <p><i>圖：狀態機 - 原始架構</i></p>
-</center>
+</div>
 
 <br/>
 
-<center>
+<div align="center">
 
 ``` mermaid
 graph LR
@@ -153,35 +155,33 @@ graph LR
     Pull-In -->|Pull-In Fail| OFF
     Lock -->|Lock Lost| Pull-In
 ```
-<p align="center"><i>圖：狀態機 - 混合架構</i></p>
-</center>
+<p><i>圖：狀態機 - 混合架構</i></p>
+</div>
 
 ## 6. 程式燒錄與執行順序 (Programming Sequence)
 
 > [!IMPORTANT]
-> **必須遵循「先燒錄 FPGA，後執行 ARM」的原則**。若 FPGA 尚未配置完成便啟動 ARM 程式，會導致 HPS 因存取非法位址而當機。
+> **硬體相依性原則**：必須遵循「**先燒錄 FPGA，後燒錄 ARM**」的順序。若 FPGA 尚未配置完成便啟動 ARM 程式，CPU 會因存取未啟動的 Lightweight Bridge 實體位址而發生 Data Abort 當機。
 
 1. **載入 FPGA 硬體邏輯 (Quartus)**：
    * 使用 **Quartus Programmer** 透過 JTAG (J13) 燒錄 `.sof` 檔案。
-   * 此步驟會建立並啟動 FPGA 端的 Parallel/Serial Search 硬體加速器。
-   * 詳細專案說明請參考 **[rtl/README.md](rtl/README.md)**。
+   * *詳細硬體編譯與 IP 配置細節請參閱 [rtl/README.md](rtl/README.md)。*
 
-2. **執行 HPS 韌體程式 (DS-5 / Arm DS)**
-   * 硬體燒錄成功後，即可透過 IDE 啟動 Debug 會話，將韌體載入 ARM Cortex-A9 核心執行。請根據您的開發環境選擇對應專案：
-     * **現代化開發 (Arm DS / AC6)**：請使用 **[hps_core](firmware/hps_core/)**。
-       * 適用於大多數個人電腦環境，詳細編譯與 Debugger 設定請務必閱讀 [該目錄 README](./firmware/hps_core/README.md)。
-     * **實驗室環境 (DS-5 / AC5)**：請使用 **[hps_altera](firmware/hps_altera/)**。
-       * 專為實驗室內建買斷版授權之筆電設計。由於編譯器版本與硬體函式庫路徑不同，請務必參閱 [該目錄 README](./firmware/hps_altera/README.md) 進行設定。
+2. **執行 HPS 韌體程式 (DS-5 / Arm DS)**：
+   * 根據您的環境開啟對應的整合開發環境（IDE），啟動 Debug 視窗並下載 `.axf` 執行檔至 RAM 運行：
+        * **現代化環境 (Arm DS / AC6 工具鏈)** 👉 使用 **[firmware/hps_core/](firmware/hps_core/)** 專案。
+        * **舊版相容環境 (DS-5 / AC5 工具鏈)** 👉 使用 **[firmware/hps_altera/](firmware/hps_altera/)** 專案。
+      * *注意：首次除錯前請務必閱讀各韌體目錄下的 `README.md` 以完成 Debugger 腳本（preloader.ds）的掛載。*
 
-3. **觀察輸出**：
-   * 確認 **PuTTY** 已開啟，並透過 **mini-USB 線** 連接至 DE10-Nano 的 **J4 (USB-UART)** 埠，即可看到系統初始化與衛星搜尋的 log 資訊。
+3. **觀察除錯終端**：
+   * 將電腦連接至 DE10-Nano 的 **J4 (USB-UART)** 埠，開啟 **PuTTY**（配置為 115200 波特率），即可即時觀測衛星搜尋等資訊。
 
 ## 7. 運行結果與驗證 (Experimental Results)
 
 本專案透過硬體模擬器驗證接收器於不同場景下的定位效能。
 
 ### 1. 測試設備 (Testing Equipment)
-若需重現驗證結果，請參閱 **[emulator.md](docs/emulator.md)** 之操作指引配置硬體環境。
+若需重現驗證結果，請參閱 **[docs/emulator.md](docs/emulator.md)** 之操作指引配置硬體環境。
 
 | 實驗環境變數 (Parameter) | 實體軟硬體配置與參數 (Configuration Details)             |
 | :---------------------- | :----------------------------------------------------- |

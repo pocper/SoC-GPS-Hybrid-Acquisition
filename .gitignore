@@ -57,7 +57,6 @@ u-boot-spl
 *.bak
 *.log
 firmware/hps_altera/debugger
-firmware/hps_altera/bootloader/*
 firmware/hps_altera/DE10_serial_parallel/INC/*
 firmware/hps_altera/DE10_serial_parallel/SRC/*
 !**/.gitkeep

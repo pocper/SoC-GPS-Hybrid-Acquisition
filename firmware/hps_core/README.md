@@ -105,10 +105,10 @@
 ### 系統交互數據流 (Data Flow Diagram)
 本專案之軟硬體交互邏輯參考自經典的開源導航專案 Namuru GPS，並針對 Cyclone V HPS 進行了移植與優化：
 
-<center>
+<div align="center">
   <img src="../../image/namuru_v2_data_flow.png" alt="Namuru V2 數據流圖" width="600">
   <p><i>圖：Namuru V2 框架之數據流圖（圖片來源：<a href="https://www.semanticscholar.org/paper/The-Namuru-V2-open-source-GNSS-receiver-project-Mumford-Akos/fdfd5889722f786af1faafd68cfd5bef9aa55d25" target="_blank">The Namuru V2 Project</a>）</i></p>
-</center>
+</div>
 
 ## 4. 如何執行 (Getting Started)
 本節說明如何將專案匯入 **ARM Development Studio**、編譯並透過 **USB-Blaster II** 進行硬體偵錯。
