@@ -76,11 +76,6 @@
    - **即時作業系統**: CMSIS RTOS v2 (基於 Keil RTX5)。
    - **除錯終端**: PuTTY。
 
-   > [!TIP]
-   > **環境申請與授權導引**
-   > 本專案韌體編譯依賴 TSRI 授權。關於如何向 TSRI 申請工具鏈、校園網路 DNS 正反查綁定等，請移步查閱申請文件：  
-   > 👉 **[TSRI 資源與開發環境申請指南 (docs/how_to_apply_ds5.md)](docs/how_to_apply_ds5.md)**
-
 ## 4. 硬體接線與安全須知 (Hardware Connection)
 
 <div align="center">
